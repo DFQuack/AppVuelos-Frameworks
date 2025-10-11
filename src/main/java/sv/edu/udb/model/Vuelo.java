@@ -20,6 +20,15 @@ public class Vuelo {
     private UUID id;
 
     @Column(nullable = false)
+    private String ciudadOrigen;
+
+    @Column(nullable = false)
+    private String ciudadDestino;
+
+    @Column(nullable = false)
+    private Integer duracionEstimada; // Minutos
+
+    @Column(nullable = false)
     private LocalDateTime horaSalida;
 
     @Column(nullable = false)
@@ -28,9 +37,11 @@ public class Vuelo {
     @Column(nullable = false)
     private Estado estado;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "aerolinea_id")
     private Aerolinea aerolinea;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "avion_id")
     private Avion avion;
 }

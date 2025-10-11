@@ -27,6 +27,6 @@ public class Aerolinea {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "aerolinea")
     private List<Avion> aviones;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "aerolinea")
+    @OneToOne(mappedBy = "aerolinea")
     private Vuelo vuelo;
 }

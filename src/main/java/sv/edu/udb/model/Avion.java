@@ -24,7 +24,8 @@ public class Avion {
     @Column(nullable = false)
     private Integer capacidad;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "aerolinea_id")
     Aerolinea aerolinea;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "avion")
