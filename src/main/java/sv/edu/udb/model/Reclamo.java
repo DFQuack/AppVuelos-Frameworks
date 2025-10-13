@@ -6,28 +6,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Avion {
+public class Reclamo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String modelo;
+    private String comentario;
 
     @Column(nullable = false)
-    private Integer capacidad;
+    private LocalDate fecha;
+
+    @Column(nullable = false)
+    private EstadoReclamo estado;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_pago", nullable = false)
+    private Pago pago;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_aerolinea")
-    Aerolinea aerolinea;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "avion")
-    List<Vuelo> vuelos;
+    @JoinColumn(name = "id_reclamo", nullable = false)
+    private Usuario usuario;
 }

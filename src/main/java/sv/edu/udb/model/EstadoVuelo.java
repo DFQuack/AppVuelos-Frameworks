@@ -1,6 +1,6 @@
 package sv.edu.udb.model;
 
-public enum Estado {
+public enum EstadoVuelo {
     DEPARTED_ONTIME,
     DEPARTED_DELAYED,
     PENDING,

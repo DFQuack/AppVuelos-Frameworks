@@ -6,28 +6,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Avion {
+public class Tripulante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String modelo;
+    private String nombreCompleto;
 
     @Column(nullable = false)
-    private Integer capacidad;
+    private LocalDate fechaNacimiento;
+
+    @Column(nullable = false)
+    private String rol;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_aerolinea")
-    Aerolinea aerolinea;
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "avion")
-    List<Vuelo> vuelos;
+    private Aerolinea aerolinea;
 }

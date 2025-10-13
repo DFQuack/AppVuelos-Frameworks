@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,8 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Vuelo {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String ciudadOrigen;
@@ -35,13 +35,16 @@ public class Vuelo {
     private Double tarifa;
 
     @Column(nullable = false)
-    private Estado estado;
+    private EstadoVuelo estado;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "aerolinea_id")
+    @JoinColumn(name = "id_aerolinea")
     private Aerolinea aerolinea;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "avion_id")
+    @JoinColumn(name = "id_avion")
     private Avion avion;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "vuelo")
+    private List<Reservacion> reservaciones;
 }

@@ -29,4 +29,7 @@ public class Aerolinea {
 
     @OneToOne(mappedBy = "aerolinea")
     private Vuelo vuelo;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "aerolinea")
+    private List<Tripulante> tripulantes;
 }
