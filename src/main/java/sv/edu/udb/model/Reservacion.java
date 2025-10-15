@@ -27,7 +27,7 @@ public class Reservacion {
     private EstadoReserva estado;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_vuelo")
+    @JoinColumn(name = "id_vuelo", nullable = false)
     private Vuelo vuelo;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "reservacion")

@@ -28,10 +28,6 @@ public class Reclamo {
     private EstadoReclamo estado;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_pago", nullable = false)
-    private Pago pago;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_reclamo", nullable = false)
-    private Usuario usuario;
+    @JoinColumn(name = "id_reservacion", nullable = false)
+    private Reservacion reservacion;
 }

@@ -7,23 +7,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pago {
+public class Cancelacion {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    @Column(nullable = false)
-    private Double monto;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private LocalDate fecha;
+
+    @Column(nullable = false)
+    private String motivo;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_reservacion", nullable = false)
