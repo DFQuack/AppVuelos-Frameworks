@@ -29,7 +29,7 @@ public class VueloService {
     }
 
     public Vuelo update(Long id, VueloRequest vueloRequest) {
-        final Vuelo oldVuelo = vueloRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Vuelo no encontrado; id: " + id));
+        final Vuelo oldVuelo = findById(id);
         final Vuelo newVuelo = vueloMapper.toVuelo(vueloRequest);
 
         oldVuelo.setCiudadOrigen(newVuelo.getCiudadOrigen());
