@@ -1,5 +1,6 @@
 package sv.edu.udb.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,5 +30,6 @@ public class Tripulante {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_aerolinea")
+    @JsonBackReference
     private Aerolinea aerolinea;
 }

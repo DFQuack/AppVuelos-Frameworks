@@ -1,5 +1,7 @@
 package sv.edu.udb.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +28,7 @@ public class Vuelo {
     private String ciudadDestino;
 
     @Column(nullable = false)
-    private Integer duracionEstimada; // Minutos
+    private Integer duracion; // Minutos
 
     @Column(nullable = false)
     private LocalDateTime horaSalida;
@@ -37,14 +39,12 @@ public class Vuelo {
     @Column(nullable = false)
     private EstadoVuelo estado;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_aerolinea")
-    private Aerolinea aerolinea;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_avion")
+    @JsonBackReference
     private Avion avion;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "vuelo")
+    @JsonManagedReference
     private List<Reservacion> reservaciones;
 }

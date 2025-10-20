@@ -1,5 +1,7 @@
 package sv.edu.udb.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,8 +28,10 @@ public class Avion {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_aerolinea")
-    Aerolinea aerolinea;
+    @JsonBackReference
+    private Aerolinea aerolinea;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "avion")
-    List<Vuelo> vuelos;
+    @JsonManagedReference
+    private List<Vuelo> vuelos;
 }
