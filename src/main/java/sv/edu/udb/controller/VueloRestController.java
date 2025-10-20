@@ -28,13 +28,13 @@ public class VueloRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Vuelo save(@RequestBody @Valid final VueloRequest vueloRequest) {
-        return vueloService.save(vueloRequest);
+    public Vuelo save(@RequestBody @Valid final VueloRequest request) {
+        return vueloService.save(request);
     }
 
     @PutMapping("/{id}")
-    public Vuelo update(@PathVariable final Long id, @RequestBody @Valid final VueloRequest vueloRequest) {
-        return vueloService.update(id, vueloRequest);
+    public Vuelo update(@PathVariable final Long id, @RequestBody @Valid final VueloRequest request) {
+        return vueloService.update(id, request);
     }
 
     @DeleteMapping("/{id}")

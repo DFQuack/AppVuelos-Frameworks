@@ -28,13 +28,13 @@ public class PasajeroRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Pasajero save(@RequestBody @Valid final PasajeroRequest pasajeroRequest) {
-        return pasajeroService.save(pasajeroRequest);
+    public Pasajero save(@RequestBody @Valid final PasajeroRequest request) {
+        return pasajeroService.save(request);
     }
 
     @PutMapping("/{id}")
-    public Pasajero update(@PathVariable final Long id, @RequestBody @Valid final PasajeroRequest pasajeroRequest) {
-        return pasajeroService.update(id, pasajeroRequest);
+    public Pasajero update(@PathVariable final Long id, @RequestBody @Valid final PasajeroRequest request) {
+        return pasajeroService.update(id, request);
     }
 
     @DeleteMapping("/{id}")

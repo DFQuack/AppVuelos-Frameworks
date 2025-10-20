@@ -29,13 +29,13 @@ public class UsuarioRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Usuario save(@RequestBody @Valid final UsuarioRequest usuarioRequest) {
-        return usuarioService.save(usuarioRequest);
+    public Usuario save(@RequestBody @Valid final UsuarioRequest request) {
+        return usuarioService.save(request);
     }
 
     @PutMapping("/{id}")
-    public Usuario update(@PathVariable final UUID id, @RequestBody @Valid final UsuarioRequest usuarioRequest) {
-        return usuarioService.update(id, usuarioRequest);
+    public Usuario update(@PathVariable final UUID id, @RequestBody @Valid final UsuarioRequest request) {
+        return usuarioService.update(id, request);
     }
 
     @DeleteMapping("/{id}")

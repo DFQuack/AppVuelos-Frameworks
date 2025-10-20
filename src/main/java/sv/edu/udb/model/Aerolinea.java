@@ -1,5 +1,6 @@
 package sv.edu.udb.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,11 +26,10 @@ public class Aerolinea {
     private String paisOrigen;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "aerolinea")
+    @JsonManagedReference
     private List<Avion> aviones;
 
-    @OneToOne(mappedBy = "aerolinea")
-    private Vuelo vuelo;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "aerolinea")
+    @JsonManagedReference
     private List<Tripulante> tripulantes;
 }

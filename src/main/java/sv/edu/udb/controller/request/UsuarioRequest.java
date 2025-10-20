@@ -2,10 +2,7 @@ package sv.edu.udb.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import sv.edu.udb.model.RolUsuario;
 
@@ -30,6 +27,6 @@ public class UsuarioRequest {
     @Email
     private String correo;
 
-    @NotBlank
+    @Pattern(regexp = "^[0-9]{4}-[0-9]{4}$")
     private String telefono;
 }
