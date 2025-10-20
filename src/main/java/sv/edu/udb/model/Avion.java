@@ -28,10 +28,10 @@ public class Avion {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_aerolinea")
-    @JsonBackReference
+    @JsonBackReference(value = "aerolinea-avion")
     private Aerolinea aerolinea;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "avion")
-    @JsonManagedReference
+    @JsonManagedReference(value = "avion-vuelo")
     private List<Vuelo> vuelos;
 }

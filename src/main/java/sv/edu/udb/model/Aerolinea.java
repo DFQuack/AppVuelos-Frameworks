@@ -26,10 +26,10 @@ public class Aerolinea {
     private String paisOrigen;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "aerolinea")
-    @JsonManagedReference
+    @JsonManagedReference(value = "aerolinea-avion")
     private List<Avion> aviones;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "aerolinea")
-    @JsonManagedReference
+    @JsonManagedReference(value = "aerolinea-tripulante")
     private List<Tripulante> tripulantes;
 }

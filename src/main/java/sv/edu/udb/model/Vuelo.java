@@ -41,10 +41,10 @@ public class Vuelo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_avion")
-    @JsonBackReference
+    @JsonBackReference(value = "avion-vuelo")
     private Avion avion;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "vuelo")
-    @JsonManagedReference
+    @JsonManagedReference(value = "vuelo-reservacion")
     private List<Reservacion> reservaciones;
 }
