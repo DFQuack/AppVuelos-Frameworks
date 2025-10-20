@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import sv.edu.udb.service.VueloService;
 
 @Controller
-@RequestMapping("/vuelos")
+@RequestMapping("/home/vuelos")
 @RequiredArgsConstructor
 public class VueloController {
     private final VueloService vueloService;

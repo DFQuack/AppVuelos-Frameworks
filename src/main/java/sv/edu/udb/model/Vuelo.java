@@ -26,7 +26,7 @@ public class Vuelo {
     private String ciudadDestino;
 
     @Column(nullable = false)
-    private Integer duracionEstimada; // Minutos
+    private Integer duracion; // Minutos
 
     @Column(nullable = false)
     private LocalDateTime horaSalida;
