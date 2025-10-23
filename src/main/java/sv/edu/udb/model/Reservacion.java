@@ -26,20 +26,20 @@ public class Reservacion {
     private LocalDate fecha;
 
     @Column(nullable = false)
-    private EstadoReserva estado;
+    private EstadoReserva estado = EstadoReserva.PAGO_PENDIENTE;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vuelo", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "vuelo-reservacion")
     private Vuelo vuelo;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "reservacion")
-    @JsonManagedReference
+    @JsonManagedReference(value = "reservacion-pasajero")
     private List<Pasajero> pasajeros;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "usuario-reservacion")
     private Usuario usuario;
 
     @OneToOne(mappedBy = "reservacion")

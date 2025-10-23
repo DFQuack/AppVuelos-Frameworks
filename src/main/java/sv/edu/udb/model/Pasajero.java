@@ -41,6 +41,6 @@ public class Pasajero {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_reservacion")
-    @JsonBackReference
+    @JsonBackReference(value = "reservacion-pasajero")
     private Reservacion reservacion;
 }

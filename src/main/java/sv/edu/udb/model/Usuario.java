@@ -37,6 +37,6 @@ public class Usuario {
     private String telefono;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usuario")
-    @JsonManagedReference
+    @JsonManagedReference(value = "usuario-reservacion")
     private List<Reservacion> reservaciones;
 }

@@ -22,6 +22,11 @@ public class ReservacionRestController {
         return reservacionService.findAll();
     }
 
+    @GetMapping("/usuario/{id}")
+    public List<Reservacion> findAllByUsuario(@PathVariable final UUID id) {
+        return reservacionService.findAllByUsuario(id);
+    }
+
     @GetMapping("/{id}")
     public Reservacion findById(@PathVariable final UUID id) {
         return reservacionService.findById(id);

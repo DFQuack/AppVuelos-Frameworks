@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import sv.edu.udb.model.Aerolinea;
+import sv.edu.udb.model.Avion;
 import sv.edu.udb.model.EstadoVuelo;
 
 import java.time.LocalDateTime;
@@ -37,4 +38,7 @@ public class VueloRequest {
 
     @NotNull
     private EstadoVuelo estado;
+
+    @NotNull
+    private Avion avion;
 }

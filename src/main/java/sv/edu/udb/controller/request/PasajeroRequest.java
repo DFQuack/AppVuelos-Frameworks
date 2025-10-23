@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Past;
 import lombok.*;
 import sv.edu.udb.model.Genero;
 import sv.edu.udb.model.GrupoEtario;
+import sv.edu.udb.model.Reservacion;
 
 import java.time.LocalDate;
 
@@ -40,4 +41,7 @@ public class PasajeroRequest {
     private String pasaporte;
 
     private String asiento;
+
+    @NotNull
+    private Reservacion reservacion;
 }

@@ -38,6 +38,7 @@ public class VueloService {
         oldVuelo.setHoraSalida(newVuelo.getHoraSalida());
         oldVuelo.setTarifa(newVuelo.getTarifa());
         oldVuelo.setEstado(newVuelo.getEstado());
+        oldVuelo.setAvion(newVuelo.getAvion());
 
         return vueloRepo.save(oldVuelo);
     }
