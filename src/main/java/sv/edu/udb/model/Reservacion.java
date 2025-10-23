@@ -26,7 +26,7 @@ public class Reservacion {
     private LocalDate fecha;
 
     @Column(nullable = false)
-    private EstadoReserva estado;
+    private EstadoReserva estado = EstadoReserva.PAGO_PENDIENTE;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vuelo", nullable = false)

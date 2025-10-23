@@ -21,9 +21,6 @@ public class Cancelacion {
     @Column(nullable = false)
     private LocalDate fecha;
 
-    @Column(nullable = false)
-    private String motivo;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_reservacion", nullable = false)
     private Reservacion reservacion;

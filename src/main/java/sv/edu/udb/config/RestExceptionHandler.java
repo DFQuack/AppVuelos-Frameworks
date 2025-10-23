@@ -126,13 +126,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private ApiError buildApiError(final HttpStatus httpStatus, final Exception ex) {
         final String typeException = ex.getClass().getSimpleName();
         final String description = StringUtils.defaultIfBlank(ex.getMessage(), ex.getClass().getSimpleName());
-        String source = "base";
+
+        String source;
         if (isMissingRequestParameterException(ex)) {
             MissingServletRequestParameterException missingParamEx = (MissingServletRequestParameterException) ex;
             source = missingParamEx.getParameterName();
         } else if (isMissingPathVariableException(ex)) {
             MissingPathVariableException missingPathEx = (MissingPathVariableException) ex;
             source = missingPathEx.getVariableName();
+        } else {
+            source = "base";
         }
         return ApiError.builder()
                 .status(httpStatus.value())

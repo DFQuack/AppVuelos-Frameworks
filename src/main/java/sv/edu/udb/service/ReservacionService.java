@@ -14,36 +14,40 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ReservacionService {
-    private final ReservacionRepository reservacionRepo;
-    private final ReservacionMapper reservacionMapper;
+    private final ReservacionRepository reservaRepo;
+    private final ReservacionMapper reservaMapper;
 
     public List<Reservacion> findAll() {
-        return reservacionRepo.findAll();
+        return reservaRepo.findAll();
+    }
+
+    public List<Reservacion> findAllByUsuario(UUID id) {
+        return reservaRepo.findAllByUsuario_Id(id);
     }
 
     public Reservacion findById(UUID id) {
-        return reservacionRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Reservación no encontrada; id: " + id));
+        return reservaRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Reservación no encontrada; id: " + id));
     }
 
     public Reservacion save(ReservacionRequest reservacionRequest) {
-        return reservacionRepo.save(reservacionMapper.toReservacion(reservacionRequest));
+        return reservaRepo.save(reservaMapper.toReservacion(reservacionRequest));
     }
 
     public Reservacion update(UUID id, ReservacionRequest reservacionRequest) {
         final Reservacion oldReservacion = findById(id);
-        final Reservacion newReservacion = reservacionMapper.toReservacion(reservacionRequest);
+        final Reservacion newReservacion = reservaMapper.toReservacion(reservacionRequest);
 
         oldReservacion.setFecha(newReservacion.getFecha());
-        oldReservacion.setEstado(newReservacion.getEstado());
+        oldReservacion.setEstado(oldReservacion.getEstado());
         oldReservacion.setVuelo(newReservacion.getVuelo());
         oldReservacion.setPasajeros(newReservacion.getPasajeros());
         oldReservacion.setUsuario(newReservacion.getUsuario());
         oldReservacion.setPago(newReservacion.getPago());
 
-        return reservacionRepo.save(oldReservacion);
+        return reservaRepo.save(oldReservacion);
     }
 
     public void delete(UUID id) {
-        reservacionRepo.deleteById(id);
+        reservaRepo.deleteById(id);
     }
 }
