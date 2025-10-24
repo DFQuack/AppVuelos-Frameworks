@@ -126,8 +126,8 @@
 
                     <div class="info-section">
                         <h3>Detalles Adicionales</h3>
-                        <p><strong>Aerolínea:</strong> Up the Sky Airlines</p>
-                        <p><strong>Tipo de Avión:</strong> Airbus A320</p>
+                        <p><strong>Aerolínea:</strong><span id="aerolinea"></span></p>
+                        <p><strong>Tipo de Avión:</strong><span id="avion"></span></p>
                         <p><strong>Clase:</strong> Económica</p>
                         <p><strong>Equipaje permitido:</strong> 1 maleta de mano + 1 equipaje de bodega (23kg)</p>
                     </div>
@@ -251,6 +251,7 @@
 
         // Precio
         document.getElementById('precioVuelo').textContent = formatPrice(vuelo.tarifa);
+
 
         // Estado
         const estadoElement = document.getElementById('estadoVuelo');

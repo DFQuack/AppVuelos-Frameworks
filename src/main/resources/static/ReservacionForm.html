@@ -114,8 +114,7 @@
         });
 
         // Establecer fecha actual
-        const today = new Date();
-        document.getElementById('fecha').valueAsDate = today;
+        document.getElementById('fecha').valueAsDate = new Date();
     });
 
     function crearReservacion() {
@@ -285,8 +284,7 @@
         document.getElementById('reservacionForm').reset();
 
         // Restablecer fecha actual
-        const today = new Date();
-        document.getElementById('fecha').valueAsDate = today;
+        document.getElementById('fecha').valueAsDate = new Date();
 
         document.getElementById('successAlert').style.display = 'none';
         document.getElementById('errorAlert').style.display = 'none';
