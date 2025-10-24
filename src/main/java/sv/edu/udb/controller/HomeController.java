@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class HomeController {
 
-    @GetMapping("/")
+    @GetMapping("/index")
     public String index() {
         return "redirect:/index.html";
     }

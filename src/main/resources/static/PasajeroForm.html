@@ -12,14 +12,18 @@
             margin: 0 auto;
             padding: 20px;
         }
+        .containerforms h2{
+            color: #fff3cd;
+         }
         .alert {
             display: none;
         }
         .form-section {
-            background: #f8f9fa;
+            background: #fff3cd;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
+            color: #0c5460;
         }
         .table-responsive {
             margin-top: 20px;
@@ -31,7 +35,7 @@
     <nav class="uk-navbar-container uk-navbar-transparent uk-navbar">
         <div class="uk-navbar-left">
             <ul class="uk-navbar-nav">
-                <li class="uk-active"><a href="">Up the sky</a></li>
+                <li class="uk-active"><a href="/index">Up the sky</a></li>
                 <li class="uk-parent"><a href="/vuelos">Ver Vuelos</a></li>
                 <li class="uk-parent"><a href="/Reservaciones">Reservaciones</a></li>
                 <li class="uk-parent"><a href="">Divisa Actual 🇺🇸 USD</a></li>
@@ -52,13 +56,9 @@
                 <h4>Información Personal</h4>
 
                 <div class="mb-3">
-                    <label class="form-label">Nombres *</label>
-                    <input type="text" class="form-control" id="nombres" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Apellidos *</label>
-                    <input type="text" class="form-control" id="apellidos" required>
+                    <label class="form-label">Nombre Completo *</label>
+                    <input type="text" class="form-control" id="nombreCompleto" required>
+                    <div class="form-text">Ingrese nombre y apellidos completos</div>
                 </div>
 
                 <div class="mb-3">
@@ -74,11 +74,30 @@
                 <div class="mb-3">
                     <label class="form-label">Fecha de Nacimiento *</label>
                     <input type="date" class="form-control" id="fechaNacimiento" required>
+                    <div class="form-text">La fecha se enviará en formato DD/MM/AAAA</div>
                 </div>
             </div>
 
             <div class="form-section">
                 <h4>Información Laboral</h4>
+
+                <div class="mb-3">
+                    <label class="form-label">Rol *</label>
+                    <select class="form-select" id="rol" required>
+                        <option value="">Seleccionar rol</option>
+                        <option value="PILOTO">Piloto</option>
+                        <option value="COPILOTO">Copiloto</option>
+                        <option value="SOBRECARGO">Sobrecargo</option>
+                        <option value="INGENIERO_VUELO">Ingeniero de Vuelo</option>
+                        <option value="AZAFATA">Azafata</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">ID de Aerolínea *</label>
+                    <input type="number" class="form-control" id="aerolineaId" required min="1">
+                    <div class="form-text">Ingrese el ID numérico de la aerolínea</div>
+                </div>
 
                 <div class="mb-3">
                     <label class="form-label">Grupo Etario *</label>
@@ -173,29 +192,33 @@
 
     function crearTripulante() {
         // Obtener valores del formulario
-        const nombres = document.getElementById('nombres').value;
-        const apellidos = document.getElementById('apellidos').value;
+        const nombreCompleto = document.getElementById('nombreCompleto').value;
         const genero = document.getElementById('genero').value;
         const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+        const rol = document.getElementById('rol').value;
+        const aerolineaId = document.getElementById('aerolineaId').value;
         const grupoEtario = document.getElementById('grupoEtario').value;
         const pasaporte = document.getElementById('pasaporte').value;
         const asiento = document.getElementById('asiento').value;
 
         // Validaciones básicas
-        if (!nombres || !apellidos || !genero || !fechaNacimiento || !grupoEtario || !pasaporte || !asiento) {
+        if (!nombreCompleto || !genero || !fechaNacimiento || !rol || !aerolineaId || !grupoEtario || !pasaporte || !asiento) {
             mostrarError('Por favor, complete todos los campos obligatorios (*)');
             return;
         }
 
-        // Formatear fecha a YYYY-MM-DD
-        const fechaFormateada = formatDateToYYYYMMDD(new Date(fechaNacimiento));
+        // Formatear fecha a DD/MM/YYYY
+        const fechaFormateada = formatDateToDDMMYYYY(new Date(fechaNacimiento));
 
-        // Preparar datos para la API
+        // Preparar datos para la API según lo que espera TripulanteRequest
         const tripulanteData = {
-            nombres: nombres,
-            apellidos: apellidos,
+            nombreCompleto: nombreCompleto,
             genero: genero,
             fechaNacimiento: fechaFormateada,
+            rol: rol,
+            aerolinea: {
+                id: parseInt(aerolineaId)
+            },
             grupoEtario: grupoEtario,
             pasaporte: pasaporte,
             asiento: asiento
@@ -265,9 +288,9 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Nombre Completo</th>
+                                    <th>Rol</th>
                                     <th>Género</th>
-                                    <th>Grupo Etario</th>
-                                    <th>Asiento</th>
+                                    <th>Aerolínea ID</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -278,10 +301,10 @@
                     html += `
                         <tr>
                             <td>${tripulante.id}</td>
-                            <td>${tripulante.nombres} ${tripulante.apellidos}</td>
+                            <td>${tripulante.nombreCompleto || tripulante.nombres + ' ' + tripulante.apellidos}</td>
+                            <td><span class="badge ${getRolBadgeClass(tripulante.rol)}">${tripulante.rol}</span></td>
                             <td>${formatGenero(tripulante.genero)}</td>
-                            <td><span class="badge ${getGrupoEtarioBadgeClass(tripulante.grupoEtario)}">${tripulante.grupoEtario}</span></td>
-                            <td>${tripulante.asiento}</td>
+                            <td>${tripulante.aerolinea ? tripulante.aerolinea.id : 'N/A'}</td>
                             <td>
                                 <button class="btn btn-sm btn-outline-warning" onclick="editarTripulante(${tripulante.id})">Editar</button>
                                 <button class="btn btn-sm btn-outline-danger" onclick="eliminarTripulante(${tripulante.id})">Eliminar</button>
@@ -300,19 +323,24 @@
     }
 
     function editarTripulante(id) {
-        // Redirigir a página de edición o cargar datos en el formulario
         if (confirm(`¿Desea editar el tripulante con ID ${id}?`)) {
-            // Cargar datos del tripulante en el formulario
             fetch(`${API_URL}/${id}`)
                 .then(response => {
                     if (!response.ok) throw new Error('Error al cargar tripulante');
                     return response.json();
                 })
                 .then(tripulante => {
-                    document.getElementById('nombres').value = tripulante.nombres;
-                    document.getElementById('apellidos').value = tripulante.apellidos;
+                    document.getElementById('nombreCompleto').value = tripulante.nombreCompleto || (tripulante.nombres + ' ' + tripulante.apellidos);
                     document.getElementById('genero').value = tripulante.genero;
-                    document.getElementById('fechaNacimiento').value = tripulante.fechaNacimiento;
+
+                    // Convertir fecha para input date
+                    if (tripulante.fechaNacimiento) {
+                        const fecha = convertToInputDate(tripulante.fechaNacimiento);
+                        document.getElementById('fechaNacimiento').value = fecha;
+                    }
+
+                    document.getElementById('rol').value = tripulante.rol;
+                    document.getElementById('aerolineaId').value = tripulante.aerolinea ? tripulante.aerolinea.id : '';
                     document.getElementById('grupoEtario').value = tripulante.grupoEtario;
                     document.getElementById('pasaporte').value = tripulante.pasaporte;
                     document.getElementById('asiento').value = tripulante.asiento;
@@ -332,24 +360,34 @@
     }
 
     function actualizarTripulante(id) {
-        // Similar a crearTripulante pero con método PUT
-        const nombres = document.getElementById('nombres').value;
-        const apellidos = document.getElementById('apellidos').value;
+        const nombreCompleto = document.getElementById('nombreCompleto').value;
         const genero = document.getElementById('genero').value;
         const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+        const rol = document.getElementById('rol').value;
+        const aerolineaId = document.getElementById('aerolineaId').value;
         const grupoEtario = document.getElementById('grupoEtario').value;
         const pasaporte = document.getElementById('pasaporte').value;
         const asiento = document.getElementById('asiento').value;
 
+        // Formatear fecha a DD/MM/YYYY
+        const fechaFormateada = formatDateToDDMMYYYY(new Date(fechaNacimiento));
+
         const tripulanteData = {
-            nombres: nombres,
-            apellidos: apellidos,
+            nombreCompleto: nombreCompleto,
             genero: genero,
-            fechaNacimiento: fechaNacimiento,
+            fechaNacimiento: fechaFormateada,
+            rol: rol,
+            aerolinea: {
+                id: parseInt(aerolineaId)
+            },
             grupoEtario: grupoEtario,
             pasaporte: pasaporte,
             asiento: asiento
         };
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Actualizando...';
 
         fetch(`${API_URL}/${id}`, {
             method: 'PUT',
@@ -369,7 +407,11 @@
         })
         .catch(error => {
             console.error('Error:', error);
-            mostrarError('Error al actualizar tripulante');
+            mostrarError('Error al actualizar tripulante: ' + error.message);
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Actualizar Tripulante';
         });
     }
 
@@ -385,17 +427,25 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                mostrarError('Error al eliminar tripulante');
+                mostrarError('Error al eliminar tripulante: ' + error.message);
             });
         }
     }
 
     // Funciones de utilidad
-    function formatDateToYYYYMMDD(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
+    function formatDateToDDMMYYYY(date) {
         const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
+    function convertToInputDate(dateString) {
+        if (dateString.includes('/')) {
+            const parts = dateString.split('/');
+            return `${parts[2]}-${parts[1]}-${parts[0]}`;
+        }
+        return dateString;
     }
 
     function formatGenero(genero) {
@@ -405,6 +455,17 @@
             'O': 'Otro'
         };
         return generos[genero] || genero;
+    }
+
+    function getRolBadgeClass(rol) {
+        const clases = {
+            'PILOTO': 'bg-primary',
+            'COPILOTO': 'bg-info',
+            'SOBRECARGO': 'bg-success',
+            'INGENIERO_VUELO': 'bg-warning',
+            'AZAFATA': 'bg-secondary'
+        };
+        return clases[rol] || 'bg-dark';
     }
 
     function getGrupoEtarioBadgeClass(grupo) {
