@@ -23,7 +23,7 @@ public class UsuarioRestController {
     }
 
     @GetMapping("/{id}")
-    public Usuario findById(@PathVariable final UUID id) {
+    public Usuario findById(@PathVariable final Long id) {
         return usuarioService.findById(id);
     }
 
@@ -34,13 +34,13 @@ public class UsuarioRestController {
     }
 
     @PutMapping("/{id}")
-    public Usuario update(@PathVariable final UUID id, @RequestBody @Valid final UsuarioRequest request) {
+    public Usuario update(@PathVariable final Long id, @RequestBody @Valid final UsuarioRequest request) {
         return usuarioService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable final UUID id) {
+    public void delete(@PathVariable final Long id) {
         usuarioService.delete(id);
     }
 }

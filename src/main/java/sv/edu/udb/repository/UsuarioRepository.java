@@ -5,5 +5,5 @@ import sv.edu.udb.model.Usuario;
 
 import java.util.UUID;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 }

@@ -29,11 +29,12 @@ public class CancelacionService {
     }
 
     public Cancelacion save(CancelacionRequest request) {
-        final Cancelacion cancel = cancelRepo.save(cancelMapper.toCancelacion(request));
-        final Reservacion reservacion = reservaRepo.findById(cancel.getReservacion().getId()).orElse(null);
-        if (reservacion != null) {
-            reservacion.setEstado(EstadoReserva.CANCELADA);
-            reservaRepo.save(reservacion);
+        final Cancelacion cancel = cancelMapper.toCancelacion(request);
+        final Reservacion reserva = reservaRepo.findById(cancel.getReservacion().getId()).orElse(null);
+        if (reserva != null) {
+            cancel.setReservacion(reserva);
+            reserva.setEstado(EstadoReserva.CANCELADA);
+            return cancelRepo.save(cancel);
         }
         return cancel;
     }
