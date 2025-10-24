@@ -1,49 +1,151 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Pago</title>
+    <title>Pago - Up the Sky</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.24.2/dist/css/uikit.min.css" />
     <link rel="stylesheet" href="css/style.css"/>
+    <style>
+        .containerforms {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .alert {
+            display: none;
+        }
+        .form-section {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #0c5460;
+        }
+        .info-vuelo {
+            background: #fff3cd;
+
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #0c5460;
+
+            
+        }
+        .monto-total {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #28a745;
+        }
+    </style>
 </head>
 <body>
 <div class="container-xxl">
     <nav class="uk-navbar-container uk-navbar-transparent uk-navbar">
         <div class="uk-navbar-left">
             <ul class="uk-navbar-nav">
-                <li class="uk-active"><a href="">Up the sky</a></li>
-                <li class="uk-parent"><a href="">Reservar Vuelo</a></li>
+                <li class="uk-active"><a href="/index">Up the sky</a></li>
+                <li class="uk-parent"><a href="/vuelos">Volver a Vuelos</a></li>
                 <li class="uk-parent"><a href="">Divisa Actual 🇺🇸 USD</a></li>
             </ul>
         </div>
     </nav>
     <br>
+
     <div class="containerforms">
+        <h2 class="text-center mb-4">Procesar Pago</h2>
 
-        <form>
-            <div class="mb-3">
-                <label  class="form-label">Monto</label>
-                <input type="text" class="form-control" id="">
-            </div>
-            
-            <div class="mb-3">
-                <label class="form-label">Reservaciones</label>
-                <input type="text" class="form-control" id="">
+        <!-- Mensajes de éxito y error -->
+        <div id="successAlert" class="alert alert-success" role="alert"></div>
+        <div id="errorAlert" class="alert alert-danger" role="alert"></div>
+
+        <!-- Información del vuelo -->
+        <div id="infoVueloSection" class="info-vuelo" style="display: none;">
+            <h5>Información del Vuelo</h5>
+            <p id="infoVueloTexto"></p>
+            <p class="monto-total" id="montoTotal"></p>
+        </div>
+
+        <form id="pagoForm">
+            <div class="form-section">
+                <h4>Información de Pago</h4>
+
+                <div class="mb-3">
+                    <label class="form-label">Monto *</label>
+                    <input type="number" class="form-control" id="monto" step="0.01" min="0" required>
+                    <div class="form-text">Ingrese el monto a pagar</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Fecha de Pago *</label>
+                    <input type="date" class="form-control" id="fecha" required>
+                    <div class="form-text">La fecha se enviará en formato DD/MM/AAAA</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">ID de Reservación *</label>
+                    <input type="text" class="form-control" id="reservacionId" required>
+                    <div class="form-text">Ingrese el ID de la reservación (UUID)</div>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label" class="form-label">Fecha</label>
-                <input type="date" class="form-control" id="">
+            <div class="form-section">
+                <h4>Información de Método de Pago</h4>
+
+                <div class="mb-3">
+                    <label class="form-label">Método de Pago *</label>
+                    <select class="form-select" id="metodoPago" required>
+                        <option value="">Seleccionar método</option>
+                        <option value="TARJETA_CREDITO">Tarjeta de Crédito</option>
+                        <option value="TARJETA_DEBITO">Tarjeta de Débito</option>
+                        <option value="PAYPAL">PayPal</option>
+                        <option value="TRANSFERENCIA">Transferencia Bancaria</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Número de Tarjeta</label>
+                    <input type="text" class="form-control" id="numeroTarjeta" placeholder="XXXX XXXX XXXX XXXX">
+                    <div class="form-text" id="tarjetaHelp">Solo para pagos con tarjeta</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Fecha de Vencimiento</label>
+                            <input type="text" class="form-control" id="vencimiento" placeholder="MM/AA">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">CVV</label>
+                            <input type="text" class="form-control" id="cvv" placeholder="XXX">
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                    Procesar Pago
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="limpiarFormulario()">
+                    Limpiar Formulario
+                </button>
+            </div>
         </form>
 
+        <div class="mt-4">
+            <h5>Pagos Recientes</h5>
+            <button type="button" class="btn btn-outline-info btn-sm" onclick="cargarPagos()">
+                Ver Todos los Pagos
+            </button>
+            <div id="listaPagos" class="mt-2"></div>
+        </div>
     </div>
     <br>
 </div>
+
 <footer>
     <div>
         <p>
@@ -76,5 +178,212 @@
         <h3>Up the sky Company 2025 ©</h3>
     </div>
 </footer>
+
+<script>
+    const API_URL = '/api/pagos';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('pagoForm');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            procesarPago();
+        });
+
+        // Cargar información del vuelo desde la URL
+        cargarInfoVueloDesdeURL();
+
+        // Establecer fecha actual
+        const today = new Date();
+        document.getElementById('fecha').valueAsDate = today;
+
+        // Cargar lista de pagos
+        cargarPagos();
+    });
+
+    function cargarInfoVueloDesdeURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const vueloId = urlParams.get('vueloId');
+        const tarifa = urlParams.get('tarifa');
+
+        if (vueloId && tarifa) {
+            const infoVueloSection = document.getElementById('infoVueloSection');
+            const infoVueloTexto = document.getElementById('infoVueloTexto');
+            const montoTotal = document.getElementById('montoTotal');
+            const montoInput = document.getElementById('monto');
+
+            infoVueloTexto.textContent = `Vuelo #${vueloId} seleccionado para pago`;
+            montoTotal.textContent = `Total a pagar: $${parseFloat(tarifa).toFixed(2)} USD`;
+            montoInput.value = tarifa;
+
+            infoVueloSection.style.display = 'block';
+        }
+    }
+
+    function procesarPago() {
+        const monto = document.getElementById('monto').value;
+        const fecha = document.getElementById('fecha').value;
+        const reservacionId = document.getElementById('reservacionId').value;
+
+        // Validaciones básicas
+        if (!monto || !fecha || !reservacionId) {
+            mostrarError('Por favor, complete todos los campos obligatorios (*)');
+            return;
+        }
+
+        // Formatear fecha a DD/MM/YYYY
+        const fechaFormateada = formatDateToDDMMYYYY(new Date(fecha));
+
+        // Preparar datos para la API según PagoRequest
+        const pagoData = {
+            monto: parseFloat(monto),
+            fecha: fechaFormateada,
+            reservacion: {
+                id: reservacionId
+            }
+        };
+
+        console.log('Enviando datos de pago:', pagoData);
+
+        // Mostrar loading
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...';
+
+        // Enviar datos a la API
+        fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(pagoData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`Error ${response.status}: ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then(pagoCreado => {
+            console.log('Pago creado:', pagoCreado);
+            mostrarExito(`¡Pago procesado exitosamente! ID: ${pagoCreado.id}`);
+            limpiarFormulario();
+            cargarPagos();
+        })
+        .catch(error => {
+            console.error('Error al procesar pago:', error);
+            mostrarError('Error al procesar el pago: ' + error.message);
+        })
+        .finally(() => {
+            // Restaurar botón
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Procesar Pago';
+        });
+    }
+
+    function cargarPagos() {
+        const listaPagos = document.getElementById('listaPagos');
+        listaPagos.innerHTML = '<p>Cargando pagos...</p>';
+
+        fetch(API_URL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al cargar pagos');
+                }
+                return response.json();
+            })
+            .then(pagos => {
+                if (pagos.length === 0) {
+                    listaPagos.innerHTML = '<p>No hay pagos registrados.</p>';
+                    return;
+                }
+
+                let html = `
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                    <th>Reservación ID</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                pagos.slice(0, 5).forEach(pago => {
+                    html += `
+                        <tr>
+                            <td><small>${pago.id ? pago.id.substring(0, 8) + '...' : 'N/A'}</small></td>
+                            <td>$${pago.monto ? pago.monto.toFixed(2) : '0.00'}</td>
+                            <td>${pago.fecha || 'N/A'}</td>
+                            <td><small>${pago.reservacion ? pago.reservacion.id.substring(0, 8) + '...' : 'N/A'}</small></td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table></div>';
+                listaPagos.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                listaPagos.innerHTML = '<p class="text-danger">Error al cargar pagos</p>';
+            });
+    }
+
+    // Funciones de utilidad
+    // Formatear fecha a DD/MM/AAAA
+formatDateToDDMMYYYY(date: Date): string {
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+// Ejemplo de uso
+const fechaReservacion = new Date();
+const fechaFormateada = this.formatDateToDDMMYYYY(fechaReservacion);
+// Resultado: "24/10/2025"
+
+    function mostrarExito(mensaje) {
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+
+        successAlert.textContent = mensaje;
+        successAlert.style.display = 'block';
+        errorAlert.style.display = 'none';
+
+        setTimeout(() => {
+            successAlert.style.display = 'none';
+        }, 5000);
+    }
+
+    function mostrarError(mensaje) {
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+
+        errorAlert.textContent = mensaje;
+        errorAlert.style.display = 'block';
+        successAlert.style.display = 'none';
+
+        setTimeout(() => {
+            errorAlert.style.display = 'none';
+        }, 5000);
+    }
+
+    function limpiarFormulario() {
+        document.getElementById('pagoForm').reset();
+
+        // Restablecer fecha actual
+        const today = new Date();
+        document.getElementById('fecha').valueAsDate = today;
+
+        document.getElementById('successAlert').style.display = 'none';
+        document.getElementById('errorAlert').style.display = 'none';
+    }
+</script>
 </body>
 </html>

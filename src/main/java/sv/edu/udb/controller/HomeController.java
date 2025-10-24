@@ -24,7 +24,9 @@ public class HomeController {
     public String redirectToPasajero() {
         return "redirect:/PasajeroForm.html";
     }
-    @GetMapping("/ReservaForm?{id}")
-    public String redirectToReservaForm(@PathVariable Long id) {
-        return "redirect:/ReservacionForm.html"; }
+    @GetMapping("/Pago")
+    public String redirectToPago() {
+        return "redirect:/PagoForm.html";
+    }
+
 }
