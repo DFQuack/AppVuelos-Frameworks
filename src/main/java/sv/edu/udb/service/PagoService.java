@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sv.edu.udb.controller.request.PagoRequest;
+import sv.edu.udb.model.EstadoReserva;
 import sv.edu.udb.model.Pago;
 import sv.edu.udb.model.Reservacion;
 import sv.edu.udb.repository.PagoRepository;
@@ -31,8 +32,9 @@ public class PagoService {
     public Pago save(PagoRequest request) {
         final Pago pago = pagoMapper.toPago(request);
         final Reservacion reserva = reservaRepo.findById(pago.getReservacion().getId()).orElse(null);
-        if (reserva != null) {
+        if (reserva != null && reserva.getEstado() != EstadoReserva.CANCELADA) {
             pago.setReservacion(reserva);
+            reserva.setEstado(EstadoReserva.COMPLETADA);
             return pagoRepo.save(pago);
         }
         return pago;
