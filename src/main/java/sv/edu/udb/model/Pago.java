@@ -1,5 +1,6 @@
 package sv.edu.udb.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,5 +28,6 @@ public class Pago {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_reservacion", nullable = false)
+    @JsonBackReference(value = "reservacion-pago")
     private Reservacion reservacion;
 }

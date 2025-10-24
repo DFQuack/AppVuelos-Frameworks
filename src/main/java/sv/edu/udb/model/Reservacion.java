@@ -43,5 +43,14 @@ public class Reservacion {
     private Usuario usuario;
 
     @OneToOne(mappedBy = "reservacion")
+    @JsonManagedReference(value = "reservacion-pago")
     private Pago pago;
+
+    @OneToOne(mappedBy = "reservacion")
+    @JsonManagedReference(value = "reservacion-cancelacion")
+    private Cancelacion cancelacion;
+
+    @OneToOne(mappedBy = "reservacion")
+    @JsonManagedReference(value = "reservacion-reclamo")
+    private Reclamo reclamo;
 }

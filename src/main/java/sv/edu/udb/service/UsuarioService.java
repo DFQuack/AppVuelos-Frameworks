@@ -21,7 +21,7 @@ public class UsuarioService {
         return usuarioRepo.findAll();
     }
 
-    public Usuario findById(UUID id) {
+    public Usuario findById(Long id) {
         return usuarioRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado; id: " + id));
     }
 
@@ -29,7 +29,7 @@ public class UsuarioService {
         return usuarioRepo.save(usuarioMapper.toUsuario(usuarioRequest));
     }
 
-    public Usuario update(UUID id, UsuarioRequest usuarioRequest) {
+    public Usuario update(Long id, UsuarioRequest usuarioRequest) {
         final Usuario oldUsuario = findById(id);
         final Usuario newUsuario = usuarioMapper.toUsuario(usuarioRequest);
 
@@ -42,7 +42,7 @@ public class UsuarioService {
         return usuarioRepo.save(oldUsuario);
     }
 
-    public void delete(UUID id) {
+    public void delete(Long id) {
         usuarioRepo.deleteById(id);
     }
 }

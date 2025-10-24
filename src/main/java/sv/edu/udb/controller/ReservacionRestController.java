@@ -23,7 +23,7 @@ public class ReservacionRestController {
     }
 
     @GetMapping("/usuario/{id}")
-    public List<Reservacion> findAllByUsuario(@PathVariable final UUID id) {
+    public List<Reservacion> findAllByUsuario(@PathVariable final Long id) {
         return reservacionService.findAllByUsuario(id);
     }
 

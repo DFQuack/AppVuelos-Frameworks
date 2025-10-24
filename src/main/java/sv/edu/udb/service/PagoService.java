@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sv.edu.udb.controller.request.PagoRequest;
 import sv.edu.udb.model.Pago;
+import sv.edu.udb.model.Reservacion;
 import sv.edu.udb.repository.PagoRepository;
+import sv.edu.udb.repository.ReservacionRepository;
 import sv.edu.udb.service.mapper.PagoMapper;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PagoService {
     private final PagoRepository pagoRepo;
+    private final ReservacionRepository reservaRepo;
     private final PagoMapper pagoMapper;
 
     public List<Pago> findAll() {
@@ -26,7 +29,13 @@ public class PagoService {
     }
 
     public Pago save(PagoRequest request) {
-        return pagoRepo.save(pagoMapper.toPago(request));
+        final Pago pago = pagoMapper.toPago(request);
+        final Reservacion reserva = reservaRepo.findById(pago.getReservacion().getId()).orElse(null);
+        if (reserva != null) {
+            pago.setReservacion(reserva);
+            return pagoRepo.save(pago);
+        }
+        return pago;
     }
 
     public Pago update(UUID id, PagoRequest request) {

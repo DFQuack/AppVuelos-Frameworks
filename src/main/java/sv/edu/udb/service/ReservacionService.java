@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sv.edu.udb.controller.request.ReservacionRequest;
+import sv.edu.udb.model.EstadoReserva;
 import sv.edu.udb.model.Reservacion;
 import sv.edu.udb.repository.ReservacionRepository;
 import sv.edu.udb.service.mapper.ReservacionMapper;
@@ -21,7 +22,7 @@ public class ReservacionService {
         return reservaRepo.findAll();
     }
 
-    public List<Reservacion> findAllByUsuario(UUID id) {
+    public List<Reservacion> findAllByUsuario(Long id) {
         return reservaRepo.findAllByUsuario_Id(id);
     }
 
@@ -30,7 +31,9 @@ public class ReservacionService {
     }
 
     public Reservacion save(ReservacionRequest reservacionRequest) {
-        return reservaRepo.save(reservaMapper.toReservacion(reservacionRequest));
+        final Reservacion reserva = reservaMapper.toReservacion(reservacionRequest);
+        reserva.setEstado(EstadoReserva.PAGO_PENDIENTE);
+        return reservaRepo.save(reserva);
     }
 
     public Reservacion update(UUID id, ReservacionRequest reservacionRequest) {

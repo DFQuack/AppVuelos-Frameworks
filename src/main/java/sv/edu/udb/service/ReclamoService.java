@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sv.edu.udb.controller.request.ReclamoRequest;
 import sv.edu.udb.model.Reclamo;
+import sv.edu.udb.model.Reservacion;
 import sv.edu.udb.repository.ReclamoRepository;
+import sv.edu.udb.repository.ReservacionRepository;
 import sv.edu.udb.service.mapper.ReclamoMapper;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReclamoService {
     private final ReclamoRepository reclamoRepo;
+    private final ReservacionRepository reservaRepo;
     private final ReclamoMapper reclamoMapper;
 
     public List<Reclamo> findAll() {
@@ -25,7 +28,13 @@ public class ReclamoService {
     }
 
     public Reclamo save(ReclamoRequest request) {
-        return reclamoRepo.save(reclamoMapper.toReclamo(request));
+        final Reclamo reclamo = reclamoMapper.toReclamo(request);
+        final Reservacion reserva = reservaRepo.findById(reclamo.getReservacion().getId()).orElse(null);
+        if (reserva != null) {
+            reclamo.setReservacion(reserva);
+            return reclamoRepo.save(reclamo);
+        }
+        return reclamo;
     }
 
     public Reclamo update(Long id, ReclamoRequest request) {
