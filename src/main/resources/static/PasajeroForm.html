@@ -1,11 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Pasajero</title>
+    <title>Tripulantes - Up the Sky</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.24.2/dist/css/uikit.min.css" />
     <link rel="stylesheet" href="css/style.css"/>
+    <style>
+        .containerforms {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .alert {
+            display: none;
+        }
+        .form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .table-responsive {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 <div class="container-xxl">
@@ -13,52 +32,97 @@
         <div class="uk-navbar-left">
             <ul class="uk-navbar-nav">
                 <li class="uk-active"><a href="">Up the sky</a></li>
-                <li class="uk-parent"><a href="">Reservar Vuelo</a></li>
+                <li class="uk-parent"><a href="/vuelos">Ver Vuelos</a></li>
+                <li class="uk-parent"><a href="/Reservaciones">Reservaciones</a></li>
                 <li class="uk-parent"><a href="">Divisa Actual 🇺🇸 USD</a></li>
             </ul>
         </div>
     </nav>
     <br>
+
     <div class="containerforms">
+        <h2 class="text-center mb-4">Registro de Tripulantes</h2>
 
-        <form>
-            <div class="mb-3">
-                <label  class="form-label">Nombres</label>
-                <input type="text" class="form-control" id="">
+        <!-- Mensajes de éxito y error -->
+        <div id="successAlert" class="alert alert-success" role="alert"></div>
+        <div id="errorAlert" class="alert alert-danger" role="alert"></div>
+
+        <form id="tripulanteForm">
+            <div class="form-section">
+                <h4>Información Personal</h4>
+
+                <div class="mb-3">
+                    <label class="form-label">Nombres *</label>
+                    <input type="text" class="form-control" id="nombres" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Apellidos *</label>
+                    <input type="text" class="form-control" id="apellidos" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Género *</label>
+                    <select class="form-select" id="genero" required>
+                        <option value="">Seleccionar género</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
+                        <option value="O">Otro</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Fecha de Nacimiento *</label>
+                    <input type="date" class="form-control" id="fechaNacimiento" required>
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Apellidos</label>
-                <input type="text" class="form-control" id="">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Genero</label>
-                <input type="text" class="form-control" id="">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">GrupoEtario</label>
-                <input type="text" class="form-control" id="">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" class="form-label">FechaNacimiento</label>
-                <input type="date" class="form-control" id="">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Pasaporte</label>
-                <input type="text" class="form-control" id="">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Asiento</label>
-                <input type="text" class="form-control" id="">
+            <div class="form-section">
+                <h4>Información Laboral</h4>
+
+                <div class="mb-3">
+                    <label class="form-label">Grupo Etario *</label>
+                    <select class="form-select" id="grupoEtario" required>
+                        <option value="">Seleccionar grupo etario</option>
+                        <option value="JOVEN">Joven</option>
+                        <option value="ADULTO">Adulto</option>
+                        <option value="ADULTO_MAYOR">Adulto Mayor</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Pasaporte *</label>
+                    <input type="text" class="form-control" id="pasaporte" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Asiento *</label>
+                    <input type="text" class="form-control" id="asiento" required>
+                    <div class="form-text">Ejemplo: A1, B2, C3, etc.</div>
+                </div>
             </div>
 
-
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                    Registrar Tripulante
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="limpiarFormulario()">
+                    Limpiar Formulario
+                </button>
+            </div>
         </form>
 
+        <div class="mt-4">
+            <h5>Tripulantes Registrados</h5>
+            <button type="button" class="btn btn-outline-info btn-sm" onclick="cargarTripulantes()">
+                Actualizar Lista
+            </button>
+            <div id="listaTripulantes" class="mt-2"></div>
+        </div>
     </div>
     <br>
 </div>
+
 <footer>
     <div>
         <p>
@@ -91,5 +155,308 @@
         <h3>Up the sky Company 2025 ©</h3>
     </div>
 </footer>
+
+<script>
+    const API_URL = '/api/tripulantes';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('tripulanteForm');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            crearTripulante();
+        });
+
+        // Cargar lista de tripulantes al iniciar
+        cargarTripulantes();
+    });
+
+    function crearTripulante() {
+        // Obtener valores del formulario
+        const nombres = document.getElementById('nombres').value;
+        const apellidos = document.getElementById('apellidos').value;
+        const genero = document.getElementById('genero').value;
+        const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+        const grupoEtario = document.getElementById('grupoEtario').value;
+        const pasaporte = document.getElementById('pasaporte').value;
+        const asiento = document.getElementById('asiento').value;
+
+        // Validaciones básicas
+        if (!nombres || !apellidos || !genero || !fechaNacimiento || !grupoEtario || !pasaporte || !asiento) {
+            mostrarError('Por favor, complete todos los campos obligatorios (*)');
+            return;
+        }
+
+        // Formatear fecha a YYYY-MM-DD
+        const fechaFormateada = formatDateToYYYYMMDD(new Date(fechaNacimiento));
+
+        // Preparar datos para la API
+        const tripulanteData = {
+            nombres: nombres,
+            apellidos: apellidos,
+            genero: genero,
+            fechaNacimiento: fechaFormateada,
+            grupoEtario: grupoEtario,
+            pasaporte: pasaporte,
+            asiento: asiento
+        };
+
+        console.log('Enviando datos:', tripulanteData);
+
+        // Mostrar loading
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Registrando...';
+
+        // Enviar datos a la API
+        fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tripulanteData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`Error ${response.status}: ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then(tripulanteCreado => {
+            console.log('Tripulante creado:', tripulanteCreado);
+            mostrarExito(`¡Tripulante registrado exitosamente! ID: ${tripulanteCreado.id}`);
+            limpiarFormulario();
+            cargarTripulantes();
+        })
+        .catch(error => {
+            console.error('Error al crear tripulante:', error);
+            mostrarError('Error al registrar el tripulante: ' + error.message);
+        })
+        .finally(() => {
+            // Restaurar botón
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Registrar Tripulante';
+        });
+    }
+
+    function cargarTripulantes() {
+        const listaTripulantes = document.getElementById('listaTripulantes');
+        listaTripulantes.innerHTML = '<p>Cargando tripulantes...</p>';
+
+        fetch(API_URL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al cargar tripulantes');
+                }
+                return response.json();
+            })
+            .then(tripulantes => {
+                if (tripulantes.length === 0) {
+                    listaTripulantes.innerHTML = '<p>No hay tripulantes registrados.</p>';
+                    return;
+                }
+
+                let html = `
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Género</th>
+                                    <th>Grupo Etario</th>
+                                    <th>Asiento</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                tripulantes.forEach(tripulante => {
+                    html += `
+                        <tr>
+                            <td>${tripulante.id}</td>
+                            <td>${tripulante.nombres} ${tripulante.apellidos}</td>
+                            <td>${formatGenero(tripulante.genero)}</td>
+                            <td><span class="badge ${getGrupoEtarioBadgeClass(tripulante.grupoEtario)}">${tripulante.grupoEtario}</span></td>
+                            <td>${tripulante.asiento}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-warning" onclick="editarTripulante(${tripulante.id})">Editar</button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="eliminarTripulante(${tripulante.id})">Eliminar</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table></div>';
+                listaTripulantes.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                listaTripulantes.innerHTML = '<p class="text-danger">Error al cargar tripulantes</p>';
+            });
+    }
+
+    function editarTripulante(id) {
+        // Redirigir a página de edición o cargar datos en el formulario
+        if (confirm(`¿Desea editar el tripulante con ID ${id}?`)) {
+            // Cargar datos del tripulante en el formulario
+            fetch(`${API_URL}/${id}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Error al cargar tripulante');
+                    return response.json();
+                })
+                .then(tripulante => {
+                    document.getElementById('nombres').value = tripulante.nombres;
+                    document.getElementById('apellidos').value = tripulante.apellidos;
+                    document.getElementById('genero').value = tripulante.genero;
+                    document.getElementById('fechaNacimiento').value = tripulante.fechaNacimiento;
+                    document.getElementById('grupoEtario').value = tripulante.grupoEtario;
+                    document.getElementById('pasaporte').value = tripulante.pasaporte;
+                    document.getElementById('asiento').value = tripulante.asiento;
+
+                    // Cambiar el botón a "Actualizar"
+                    const submitBtn = document.getElementById('submitBtn');
+                    submitBtn.textContent = 'Actualizar Tripulante';
+                    submitBtn.onclick = function() { actualizarTripulante(id); };
+
+                    mostrarExito('Datos del tripulante cargados. Modifique y haga clic en "Actualizar Tripulante"');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    mostrarError('Error al cargar datos del tripulante');
+                });
+        }
+    }
+
+    function actualizarTripulante(id) {
+        // Similar a crearTripulante pero con método PUT
+        const nombres = document.getElementById('nombres').value;
+        const apellidos = document.getElementById('apellidos').value;
+        const genero = document.getElementById('genero').value;
+        const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+        const grupoEtario = document.getElementById('grupoEtario').value;
+        const pasaporte = document.getElementById('pasaporte').value;
+        const asiento = document.getElementById('asiento').value;
+
+        const tripulanteData = {
+            nombres: nombres,
+            apellidos: apellidos,
+            genero: genero,
+            fechaNacimiento: fechaNacimiento,
+            grupoEtario: grupoEtario,
+            pasaporte: pasaporte,
+            asiento: asiento
+        };
+
+        fetch(`${API_URL}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tripulanteData)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Error al actualizar');
+            return response.json();
+        })
+        .then(() => {
+            mostrarExito('Tripulante actualizado exitosamente');
+            limpiarFormulario();
+            cargarTripulantes();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            mostrarError('Error al actualizar tripulante');
+        });
+    }
+
+    function eliminarTripulante(id) {
+        if (confirm(`¿Está seguro de eliminar el tripulante con ID ${id}?`)) {
+            fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Error al eliminar');
+                mostrarExito('Tripulante eliminado exitosamente');
+                cargarTripulantes();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarError('Error al eliminar tripulante');
+            });
+        }
+    }
+
+    // Funciones de utilidad
+    function formatDateToYYYYMMDD(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function formatGenero(genero) {
+        const generos = {
+            'M': 'Masculino',
+            'F': 'Femenino',
+            'O': 'Otro'
+        };
+        return generos[genero] || genero;
+    }
+
+    function getGrupoEtarioBadgeClass(grupo) {
+        const clases = {
+            'JOVEN': 'bg-info',
+            'ADULTO': 'bg-success',
+            'ADULTO_MAYOR': 'bg-warning'
+        };
+        return clases[grupo] || 'bg-secondary';
+    }
+
+    function mostrarExito(mensaje) {
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+
+        successAlert.textContent = mensaje;
+        successAlert.style.display = 'block';
+        errorAlert.style.display = 'none';
+
+        setTimeout(() => {
+            successAlert.style.display = 'none';
+        }, 5000);
+    }
+
+    function mostrarError(mensaje) {
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+
+        errorAlert.textContent = mensaje;
+        errorAlert.style.display = 'block';
+        successAlert.style.display = 'none';
+
+        setTimeout(() => {
+            errorAlert.style.display = 'none';
+        }, 5000);
+    }
+
+    function limpiarFormulario() {
+        document.getElementById('tripulanteForm').reset();
+
+        // Restablecer el botón a su estado original
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.textContent = 'Registrar Tripulante';
+        submitBtn.onclick = null;
+        submitBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            crearTripulante();
+        });
+
+        document.getElementById('successAlert').style.display = 'none';
+        document.getElementById('errorAlert').style.display = 'none';
+    }
+</script>
 </body>
 </html>

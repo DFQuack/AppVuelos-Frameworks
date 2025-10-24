@@ -1,80 +1,296 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reservacion</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Reservación - Up the Sky</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.24.2/dist/css/uikit.min.css" />
     <link rel="stylesheet" href="css/style.css"/>
+    <style>
+        .containerforms {
+        max-width: 600px; margin: 0 auto; padding: 20px;
+         }
+         .containerforms h2{
+            color: #fff3cd;
+         }
+        .alert {
+        display: none;
+        }
+        .form-section {
+        background: #fff3cd; padding: 20px; border-radius: 8px; margin-bottom: 20px; color: #0c5460;
+        }
+        .mt-4 h5
+        {
+            color: #fff3cd;;
+        }
+        .mt-2
+        {
+            color: #fff3cd;
+        }
+    </style>
 </head>
 <body>
 <div class="container-xxl">
     <nav class="uk-navbar-container uk-navbar-transparent uk-navbar">
         <div class="uk-navbar-left">
             <ul class="uk-navbar-nav">
-                <li class="uk-active"><a href="">Up the sky</a></li>
-                <li class="uk-parent"><a href="">Reservar Vuelo</a></li>
+                <li class="uk-active"><a href="index.html">Up the sky</a></li>
+                <li class="uk-parent"><a href="/vuelos">Ver Vuelos</a></li>
                 <li class="uk-parent"><a href="">Divisa Actual 🇺🇸 USD</a></li>
             </ul>
         </div>
     </nav>
     <br>
+
     <div class="containerforms">
+        <h2 class="text-center mb-4">Crear Nueva Reservación</h2>
 
-        <form>
-            <div class="mb-3">
-                <label  class="form-label">fecha</label>
-                <input type="date" class="form-control" id="">
-            </div>
-            
-            <div class="mb-3">
-                <label class="form-label">Estado</label>
-                <input type="text" class="form-control" id="">
+        <div id="successAlert" class="alert alert-success" role="alert"></div>
+        <div id="errorAlert" class="alert alert-danger" role="alert"></div>
+
+        <form id="reservacionForm">
+            <div class="form-section">
+                <h4>Información de la Reservación</h4>
+
+                <div class="mb-3">
+                    <label class="form-label">Fecha de la Reservación *</label>
+                    <input type="date" class="form-control" id="fecha" required>
+                    <div class="form-text">La fecha se enviará en formato DD/MM/AAAA</div>
+                </div>
+
+                <!-- Estado removido porque siempre será PAGO_PENDIENTE -->
             </div>
 
-            <div class="mb-3">
-                <label class="form-label" class="form-label">Fecha</label>
-                <input type="date" class="form-control" id="">
+            <div class="form-section">
+                <h4>Información del Usuario</h4>
+                <div class="mb-3">
+                    <label class="form-label">ID del Usuario *</label>
+                    <input type="number" class="form-control" id="usuarioId" required min="1">
+                    <div class="form-text">Ingrese el ID numérico del usuario existente</div>
+                </div>
             </div>
 
-            
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="form-section">
+                <h4>Información del Vuelo</h4>
+                <div class="mb-3">
+                    <label class="form-label">ID del Vuelo *</label>
+                    <input type="number" class="form-control" id="vueloId" required min="1">
+                    <div class="form-text">Ingrese el ID numérico del vuelo existente</div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                    Crear Reservación
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="limpiarFormulario()">
+                    Limpiar Formulario
+                </button>
+            </div>
         </form>
 
-    </div>
-    <br>
-</div>
-<footer>
-    <div>
-        <p>
-            <img src="images/facebook.png" alt="">
-            <a href="www.facebook.com">Nuestro facebook</a>
-        </p>
-        <p>
-            <img src="images/instagram.png" alt="">
-            <a href="www.instagram.com">Instagram</a>
-        </p>
-        <p>
-            <img src="images/youtube.png" alt="">
-            <a href="www.youtube.com">Youtube</a>
-        </p>
-        <br>
-        <h4>Contribuyentes y fundadores</h4>
-        <br>
-        <div class="creators">
-            <p>
-                Fernando Josue Anzora Aquino
-                <br>
-                Luis Enrique Cartagena Arteaga
-                <br>
-                Marlon Omar Guzman Mejia
-                <br>
-                Daniel Enrique Flores Lino
-                <br>
-            </p>
+        <div class="mt-4">
+            <h5>Reservaciones Recientes</h5>
+            <button type="button" class="btn btn-outline-info btn-sm" onclick="cargarReservaciones()">
+                Ver Todas las Reservaciones
+            </button>
+            <div id="listaReservaciones" class="mt-2"></div>
         </div>
-        <h3>Up the sky Company 2025 ©</h3>
     </div>
+</div>
+
+<footer>
+    <!-- Tu footer aquí -->
 </footer>
+
+<script>
+    const API_URL = '/api/reservaciones';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('reservacionForm');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            crearReservacion();
+        });
+
+        // Establecer fecha actual
+        const today = new Date();
+        document.getElementById('fecha').valueAsDate = today;
+    });
+
+    function crearReservacion() {
+        const fechaInput = document.getElementById('fecha');
+        const usuarioId = document.getElementById('usuarioId').value;
+        const vueloId = document.getElementById('vueloId').value;
+
+        // Obtener la fecha y formatearla como DD/MM/YYYY
+        const fecha = new Date(fechaInput.value);
+        const fechaFormateada = formatDateToDDMMYYYY(fecha);
+
+        if (!fechaInput.value || !usuarioId || !vueloId) {
+            mostrarError('Por favor, complete todos los campos obligatorios (*)');
+            return;
+        }
+
+        // Preparar los datos según lo que espera tu API
+        const reservacionData = {
+            fecha: fechaFormateada, // Formato DD/MM/YYYY
+            estado: "PAGO_PENDIENTE", // Siempre será este estado
+            usuario: {
+                id: parseInt(usuarioId)
+            },
+            vuelo: {
+                id: parseInt(vueloId)
+            }
+        };
+
+        console.log('Enviando datos:', reservacionData);
+
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creando...';
+
+        fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reservacionData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`Error ${response.status}: ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then(reservacionCreada => {
+            console.log('Reservación creada:', reservacionCreada);
+            mostrarExito('¡Reservación creada exitosamente! Estado: PAGO_PENDIENTE');
+            limpiarFormulario();
+            cargarReservaciones();
+        })
+        .catch(error => {
+            console.error('Error al crear reservación:', error);
+            mostrarError('Error al crear la reservación: ' + error.message);
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Crear Reservación';
+        });
+    }
+
+    // Función para formatear fecha a DD/MM/YYYY
+    function formatDateToDDMMYYYY(date) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
+    // Función para mostrar fechas en formato legible
+    function formatDateToReadable(dateString) {
+        if (!dateString) return 'N/A';
+
+        // Si ya está en formato DD/MM/YYYY, devolver tal cual
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
+            return dateString;
+        }
+
+        // Si está en otro formato, intentar convertirlo
+        try {
+            const date = new Date(dateString);
+            return formatDateToDDMMYYYY(date);
+        } catch (e) {
+            return dateString;
+        }
+    }
+
+    function cargarReservaciones() {
+        const listaReservaciones = document.getElementById('listaReservaciones');
+        listaReservaciones.innerHTML = '<p>Cargando reservaciones...</p>';
+
+        fetch(API_URL)
+            .then(response => {
+                if (!response.ok) throw new Error('Error al cargar reservaciones');
+                return response.json();
+            })
+            .then(reservaciones => {
+                if (reservaciones.length === 0) {
+                    listaReservaciones.innerHTML = '<p>No hay reservaciones registradas.</p>';
+                    return;
+                }
+
+                let html = '<div class="table-responsive"><table class="table table-sm table-striped"><thead><tr><th>ID</th><th>Fecha</th><th>Estado</th><th>Usuario ID</th><th>Vuelo ID</th></tr></thead><tbody>';
+
+                reservaciones.slice(0, 5).forEach(reserva => {
+                    html += `
+                        <tr>
+                            <td><small>${reserva.id ? reserva.id.substring(0, 8) + '...' : 'N/A'}</small></td>
+                            <td>${formatDateToReadable(reserva.fecha)}</td>
+                            <td><span class="badge ${getEstadoBadgeClass(reserva.estado)}">${reserva.estado || 'PAGO_PENDIENTE'}</span></td>
+                            <td>${reserva.usuario ? reserva.usuario.id : 'N/A'}</td>
+                            <td>${reserva.vuelo ? reserva.vuelo.id : 'N/A'}</td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table></div>';
+                listaReservaciones.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                listaReservaciones.innerHTML = '<p class="text-danger">Error al cargar reservaciones</p>';
+            });
+    }
+
+    function getEstadoBadgeClass(estado) {
+        const clases = {
+            'PAGO_PENDIENTE': 'bg-warning',
+            'CONFIRMADA': 'bg-success',
+            'CANCELADA': 'bg-danger',
+            'COMPLETADA': 'bg-info'
+        };
+        return clases[estado] || 'bg-secondary';
+    }
+
+    function mostrarExito(mensaje) {
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+
+        successAlert.textContent = mensaje;
+        successAlert.style.display = 'block';
+        errorAlert.style.display = 'none';
+
+        setTimeout(() => {
+            successAlert.style.display = 'none';
+        }, 5000);
+    }
+
+    function mostrarError(mensaje) {
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+
+        errorAlert.textContent = mensaje;
+        errorAlert.style.display = 'block';
+        successAlert.style.display = 'none';
+
+        setTimeout(() => {
+            errorAlert.style.display = 'none';
+        }, 5000);
+    }
+
+    function limpiarFormulario() {
+        document.getElementById('reservacionForm').reset();
+
+        // Restablecer fecha actual
+        const today = new Date();
+        document.getElementById('fecha').valueAsDate = today;
+
+        document.getElementById('successAlert').style.display = 'none';
+        document.getElementById('errorAlert').style.display = 'none';
+    }
+</script>
 </body>
 </html>
