@@ -24,5 +24,9 @@ public class HomeController {
     public String redirectToPasajero() {
         return "redirect:/PasajeroForm.html";
     }
+    @GetMapping("/Pago")
+    public String redirectToPago() {
+        return "redirect:/PagoForm.html";
+    }
 
 }
